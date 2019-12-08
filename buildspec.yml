@@ -12,9 +12,12 @@ phases:
       - echo 'build phase'
 
 artifacts:
+  name: root-artifact
+  base-directory: ./
   secondary-artifacts:
-    artifact__automatic_classification_illegal_av__get_crawl_url_list:
-      base-directory: 'automatic_classification_illegal_av__get_crawl_url_list'
-      discard-paths: no
-      files:
-        - '**/*'
+    artifactIdentifier:
+      artifact__automatic_classification_illegal_av__get_crawl_url_list:
+        base-directory: 'automatic_classification_illegal_av__get_crawl_url_list'
+        discard-paths: no
+        files:
+          - '**/*'
