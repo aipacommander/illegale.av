@@ -1,9 +1,9 @@
-version: 0.2                                                                                                                                                                                                
+version: 0.2
 
 phases:
   install:
     runtime-versions:
-      -	python: 3.7
+      python: 3.7
     commands:
       - echo 'install phase'
       - pip install -r ./automatic_classification_illegal_av__get_crawl_url_list/requirements.txt -t ./automatic_classification_illegal_av__get_crawl_url_list
