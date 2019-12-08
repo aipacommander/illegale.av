@@ -10,14 +10,14 @@ phases:
   build:
     commands:
       - echo 'build phase'
-
+      - zip automatic_classification_illegal_av__get_crawl_url_list.zip ./automatic_classification_illegal_av__get_crawl_url_list/*
 artifacts:
   name: root-artifact
   base-directory: ./
   secondary-artifacts:
     artifactIdentifier:
       artifact__automatic_classification_illegal_av__get_crawl_url_list:
-        base-directory: 'automatic_classification_illegal_av__get_crawl_url_list'
+        base-directory: './'
         discard-paths: no
         files:
-          - '**/*'
+          - './automatic_classification_illegal_av__get_crawl_url_list.zip'
