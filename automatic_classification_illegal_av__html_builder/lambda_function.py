@@ -1,51 +1,68 @@
+from jinja2 import Template
 import boto3
-from urllib.request import urlopen
-from urllib.error import URLError, HTTPError
+from botocore.exceptions import ClientError
+
 import os
-from datetime import datetime
-import json
 import logging
 
 logger = logging.getLogger()
-logger.setLevel(logging.INFO)
-
-
-AWS_S3_BUCKET_NAME = 'automatic.classification.illegal.av'
 S3 = boto3.resource('s3')
-BUCKET = S3.Bucket(AWS_S3_BUCKET_NAME)
+TEMPLATE_AWS_S3_BUCKET_NAME = 'automatic.classification.illegal.av'
+WEB_AWS_S3_BUCKET_NAME = 'automatic.classification.illegal.av.static'
+TEMPLATE_BUCKET = S3.Bucket(TEMPLATE_AWS_S3_BUCKET_NAME)
+WEB_BUCKET = S3.Bucket(WEB_AWS_S3_BUCKET_NAME)
+DB = boto3.resource('dynamodb')
 
 
-def get_web_resource(url):
+def get_object(bucket, object_name):
+    """Retrieve an object from an Amazon S3 bucket
+
+    :param bucket_name: string
+    :param object_name: string
+    :return: botocore.response.StreamingBody object. If error, return None.
+    """
     try:
-        return urlopen(url)
-    except HTTPError as e:
-        print(e)
-    except URLError as e:
-        print('The server could not be found!')
+        response = bucket.Object(object_name).get()
+    except ClientError as e:
+        # AllAccessDisabled error == bucket or object not found
+        logging.error(e)
+        return None
+    # Return an open StreamingBody object
+    return response['Body'].read()
 
-    return None
 
 
-def main(url):
-    resource = get_web_resource(url)
-    if resource is None:
-        raise Exception('Failed html download.')
+def main():
+    index_html = get_object(TEMPLATE_BUCKET,
+                            os.path.join('static_templates', 'index.html')) \
+                            .decode('utf8')
+    box_html = get_object(TEMPLATE_BUCKET,
+                          os.path.join('static_templates', 'box.html')) \
+                          .decode('utf8')
 
-    html_resource = resource.read()
+    table_name = 'IllegalAv'
+    table = DB.Table(table_name)
+    res = table.scan(Limit=10)
 
-    return html_resource
+    index_t = Template(index_html)
+    insert_boxes = []
+    for r in res['Items']:
+        box_t = Template(box_html)
+        insert_boxes.append(box_t.render(
+            title=r['AvTitle'],
+            duration=r['duration'],
+            url=r['Url']
+        ))
+
+    output_html = index_t.render(boxes=''.join(insert_boxes))
+    return output_html
 
 
 def lambda_handler(event, context):
-    urls = json.loads(event['responsePayload']['body'])
-    for url_obj in urls:
-        html_resource = main(url_obj['SiteUrl'])
-        file_name = datetime.now().timestamp()
-        file_path = os.path.join('html_downloads', '{}.html'.format(file_name))
-        BUCKET.put_object(Key=file_path, Body=html_resource)
-        print(url_obj, file_path)
+    output_html = main()
 
-    return {
-        'statusCode': 200,
-        'body': json.dumps({})
-    }
+    # write
+    file_path = 'index.html'
+    WEB_BUCKET.put_object(Key=file_path, Body=output_html)
+    
+    return None
