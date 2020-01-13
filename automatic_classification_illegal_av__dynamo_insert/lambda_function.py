@@ -36,12 +36,8 @@ def lambda_handler(event, context):
     object_name = event['Records'][0]['s3']['object']['key']
     _json_str = get_object(object_name)
     insert_data = json.loads(_json_str)
-    
-    _date = int(datetime.now().strftime('%Y%m%d'))
-    
-    for d in insert_data:
-        d['Date'] = _date
-        table.put_item(Item=d)
+    insert_data['Date'] = int(datetime.now().strftime('%Y%m%d'))
+    table.put_item(Item=insert_data)
 
     return {
         'statusCode': 200,

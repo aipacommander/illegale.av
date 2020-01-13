@@ -92,7 +92,7 @@ def scrap_pornhub(html_obj):
             'duration': duration,
             'Url': page_url,
             'ThumnailMovieUrl': thumnail_movie_url,
-            'KeyNmae': key_name
+            'KeyName': key_name
         })
     
     return data
@@ -141,8 +141,8 @@ def lambda_handler(event, context):
     
     data = main(html_resource)
     for d in data:
-        file_name = '{}'.format(data['KeyName'])
-        del data['KeyName']
+        file_name = '{}'.format(d['KeyName'])
+        del d['KeyName']
         file_path = os.path.join('scrap_data', '{}.json'.format(file_name))
         BUCKET.put_object(Key=file_path, Body=json.dumps(d))
 

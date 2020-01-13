@@ -93,8 +93,8 @@ def exists_title(img_obj):
     
     
 def lambda_handler(event, context):
-    # object_name = event['Records'][0]['s3']['object']['key']
-    object_name = 'thumnail_movie_downloads/cd82c6c699a54265711f4d3991e76b61_1578671417.773293.mp4'
+    object_name = event['Records'][0]['s3']['object']['key']
+    # object_name = 'thumnail_movie_downloads/cd82c6c699a54265711f4d3991e76b61_1578671417.773293.mp4'
     download_file_path = download_file(object_name)
 
     # opencvで前処理

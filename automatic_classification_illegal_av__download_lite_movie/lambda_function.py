@@ -36,10 +36,11 @@ def get_object(object_name):
 def lambda_handler(event, context):
     object_name = event['Records'][0]['s3']['object']['key']
     _json_str = get_object(object_name)
-    insert_data = json.loads(_json_str)
+    json_data = json.loads(_json_str)
 
     ssl._create_default_https_context = ssl._create_unverified_context
-    url = 'https://img-l3.xvideos-cdn.com/videos/videopreview/cd/82/c6/cd82c6c699a54265711f4d3991e76b61_169.mp4'
+    # url = 'https://img-l3.xvideos-cdn.com/videos/videopreview/cd/82/c6/cd82c6c699a54265711f4d3991e76b61_169.mp4'
+    url = json_data['ThumnailMovieUrl']
     key_name = url.split('/')[-1].replace('_169.mp4', '')
     try:
         req = urllib.request.Request(url)
