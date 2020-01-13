@@ -128,5 +128,13 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+.DS_Store
+
 # project
 automatic_classification_illegal_av/*/
+
+# 練習場
+99_tmp/*.jpg
+99_tmp/*.jpeg
+99_tmp/*.mp4*
+99_tmp/*.yml
