@@ -6,26 +6,32 @@ phases:
       python: 3.8
     commands:
       - echo 'install phase'
-      - pip install -r ./automatic_classification_illegal_av__get_crawl_url_list/requirements.txt -t ./automatic_classification_illegal_av__get_crawl_url_list
-      - pip install -r ./automatic_classification_illegal_av__html_download/requirements.txt -t ./automatic_classification_illegal_av__html_download
-      - pip install -r ./automatic_classification_illegal_av__scraping/requirements.txt -t ./automatic_classification_illegal_av__scraping
-      - pip install -r ./automatic_classification_illegal_av__dynamo_insert/requirements.txt -t ./automatic_classification_illegal_av__dynamo_insert
-      - pip install -r ./automatic_classification_illegal_av__html_builder/requirements.txt -t ./automatic_classification_illegal_av__html_builder
+      - pip install -r ./automatic_classification_illegal_av__get_crawl_url_list/requirements.txt  -t ./automatic_classification_illegal_av__get_crawl_url_list
+      - pip install -r ./automatic_classification_illegal_av__html_download/requirements.txt       -t ./automatic_classification_illegal_av__html_download
+      - pip install -r ./automatic_classification_illegal_av__scraping/requirements.txt            -t ./automatic_classification_illegal_av__scraping
+      - pip install -r ./automatic_classification_illegal_av__download_lite_movie/requirements.txt -t ./automatic_classification_illegal_av__download_lite_movie
+      - pip install -r ./automatic_classification_illegal_av__check_lite_movie/requirements.txt    -t ./automatic_classification_illegal_av__check_lite_movie
+      - pip install -r ./automatic_classification_illegal_av__dynamo_insert/requirements.txt       -t ./automatic_classification_illegal_av__dynamo_insert
+      - pip install -r ./automatic_classification_illegal_av__html_builder/requirements.txt        -t ./automatic_classification_illegal_av__html_builder
   pre_build:
     commands:
       - CURR_WORKING_DIR=`pwd`
   build:
     commands:
       - echo 'build phase'
-      - cd automatic_classification_illegal_av__get_crawl_url_list/ && zip ../automatic_classification_illegal_av__get_crawl_url_list.zip * && cd ${CURR_WORKING_DIR}
-      - cd automatic_classification_illegal_av__html_download/      && zip ../automatic_classification_illegal_av__html_download.zip *      && cd ${CURR_WORKING_DIR}
-      - cd automatic_classification_illegal_av__scraping/           && zip ../automatic_classification_illegal_av__scraping.zip *           && cd ${CURR_WORKING_DIR}
-      - cd automatic_classification_illegal_av__dynamo_insert/      && zip ../automatic_classification_illegal_av__dynamo_insert.zip *      && cd ${CURR_WORKING_DIR}
-      - cd automatic_classification_illegal_av__html_builder/       && zip ../automatic_classification_illegal_av__html_builder.zip *       && cd ${CURR_WORKING_DIR}
+      - cd automatic_classification_illegal_av__get_crawl_url_list/  && zip ../automatic_classification_illegal_av__get_crawl_url_list.zip *  && cd ${CURR_WORKING_DIR}
+      - cd automatic_classification_illegal_av__html_download/       && zip ../automatic_classification_illegal_av__html_download.zip *       && cd ${CURR_WORKING_DIR}
+      - cd automatic_classification_illegal_av__scraping/            && zip ../automatic_classification_illegal_av__scraping.zip *            && cd ${CURR_WORKING_DIR}
+      - cd automatic_classification_illegal_av__download_lite_movie/ && zip ../automatic_classification_illegal_av__download_lite_movie.zip * && cd ${CURR_WORKING_DIR}
+      - cd automatic_classification_illegal_av__check_lite_movie/    && zip ../automatic_classification_illegal_av__check_lite_movie.zip *    && cd ${CURR_WORKING_DIR}
+      - cd automatic_classification_illegal_av__dynamo_insert/       && zip ../automatic_classification_illegal_av__dynamo_insert.zip *       && cd ${CURR_WORKING_DIR}
+      - cd automatic_classification_illegal_av__html_builder/        && zip ../automatic_classification_illegal_av__html_builder.zip *        && cd ${CURR_WORKING_DIR}
   post_build:
     commands:
-      - aws s3 cp automatic_classification_illegal_av__get_crawl_url_list.zip s3://automatic.classification.illegal.av/code_build/
-      - aws s3 cp automatic_classification_illegal_av__html_download.zip s3://automatic.classification.illegal.av/code_build/
-      - aws s3 cp automatic_classification_illegal_av__scraping.zip s3://automatic.classification.illegal.av/code_build/
-      - aws s3 cp automatic_classification_illegal_av__html_download.zip s3://automatic.classification.illegal.av/code_build/
-      - aws s3 cp automatic_classification_illegal_av__html_builder.zip s3://automatic.classification.illegal.av/code_build/
+      - aws s3 cp automatic_classification_illegal_av__get_crawl_url_list.zip  s3://automatic.classification.illegal.av/code_build/
+      - aws s3 cp automatic_classification_illegal_av__html_download.zip       s3://automatic.classification.illegal.av/code_build/
+      - aws s3 cp automatic_classification_illegal_av__scraping.zip            s3://automatic.classification.illegal.av/code_build/
+      - aws s3 cp automatic_classification_illegal_av__download_lite_movie.zip s3://automatic.classification.illegal.av/code_build/
+      - aws s3 cp automatic_classification_illegal_av__check_lite_movie.zip    s3://automatic.classification.illegal.av/code_build/
+      - aws s3 cp automatic_classification_illegal_av__dynamo_insert.zip       s3://automatic.classification.illegal.av/code_build/
+      - aws s3 cp automatic_classification_illegal_av__html_builder.zip        s3://automatic.classification.illegal.av/code_build/
